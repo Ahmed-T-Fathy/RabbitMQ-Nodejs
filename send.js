@@ -17,4 +17,4 @@ const sendMsg = async () => {
     },500)
 
 }
-await sendMsg();
+ sendMsg();
