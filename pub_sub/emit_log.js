@@ -1,14 +1,14 @@
 const amqplib = require('amqplib');
 
-const queueName = "task";
+const exchangeName = "logs";
 
-const msg = process.argv.slice(2).join("") || "Hello World";
+const msg = process.argv.slice(2).join("") || "Subscribe, Like, & Comment";
 
 const sendMsg = async () => {
     const connection = await amqplib.connect('amqp://localhost');
     const channel = await connection.createChannel();
-    await channel.assertQueue(queueName, { durable: true });
-    channel.sendToQueue(queueName, Buffer.from(msg), { persistent: true });
+    await channel.assertExchange(exchangeName,'fanout', { durable: false });
+    channel.publish(exchangeName,'', Buffer.from(msg));
     console.log('Sent: ', msg);
     setTimeout(() => {
         connection.close();
